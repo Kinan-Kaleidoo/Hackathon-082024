@@ -5,6 +5,7 @@ from bson import ObjectId
 from db import users_collection, user_from_dict
 import os
 from dotenv import load_dotenv
+
 import warnings
 
 warnings.filterwarnings('ignore')
@@ -20,6 +21,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'  # Redirect to the login view if not authenticated
 login_manager.login_message = "צריכים להיות מחוברים כדי לגשת לדף זה"
+mongo_username = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
 
 
 @login_manager.user_loader
