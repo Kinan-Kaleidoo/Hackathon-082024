@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Paper, Button, Box, Input } from '@mui/material';
 import axios from 'axios';
 import MediaGallery from './MediaGallery';
+import SearchComponent from '../../components/SearchComponent';
+
 import './MediaPage.css';
 
 const MediaPage = () => {
@@ -100,6 +102,8 @@ const MediaPage = () => {
         </Typography>
         <MediaGallery />
       </Paper>
+      <SearchComponent />
+
     </Container>
   );
 };

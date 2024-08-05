@@ -3,17 +3,17 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ChatPage from '../Chat/ChatPage';
 import MediaPage from '../Media/MediaPage';
 import MediaItem from '../Media/MediaItem';
-import DocumentPage from '../Documents/DocPage';
+import DocPage from '../Documents/DocPage';
 import Header from '../../components/Common/Header';
 import Footer from '../../components/Common/Footer';
 import Sidebar from '../../components/Common/Sidebar';
+import HomePage from '../Home/HomePage'; // Import the HomePage
 import AudioPage from '../Audio/AudioPage'; // Import the AudioPage
-import SignIn from '../Auto/signIn'
+import SignIn from '../Auto/signIn';
 import SignUp from '../Auto/signUp';
 
-// import './HomePage.css';
-
-const HomePage = () => {
+// Rename this component to avoid conflict
+const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -22,20 +22,21 @@ const HomePage = () => {
 
   return (
     <Router>
-      <div style={{ display: 'flex' }}>
+      <div className="app-container">
         <Sidebar open={sidebarOpen} onClose={toggleSidebar} />
-        <div style={{ flexGrow: 1 }}>
+        <div className={`main-content ${sidebarOpen ? '' : 'shrink'}`}>
           <Header onMenuClick={toggleSidebar} />
           <main>
             <Routes>
-              <Route path="/signIn" element={<SignIn/>}/> 
-              <Route path="/signUp" element={<SignUp/>}/> 
+              <Route path="/" element={<HomePage />} /> {/* HomePage route */}
+              <Route path="/signIn" element={<SignIn />} />
+              <Route path="/signUp" element={<SignUp />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/media" element={<MediaPage />} />
               <Route path="/media/:title" element={<MediaItem />} />
-              <Route path="/documents" element={<DocumentPage />} />
-              <Route path="/audio" element={<AudioPage />} /> {/* Add route here */}
               <Route path="/" element={<ChatPage />} />
+              <Route path="/doc" element={<DocPage />} />
+              <Route path="/audio" element={<AudioPage />} />
             </Routes>
           </main>
           <Footer sx={{ mt: 8, mb: 4 }}/>
@@ -45,4 +46,6 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default App;
+
+

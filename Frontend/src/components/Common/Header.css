@@ -12,4 +12,18 @@
   .header .title {
     flex-grow: 1;
   }
+  .MuiAppBar-root {
+    background-color: #3f51b5; /* Customize color as needed */
+  }
+  
+  .MuiToolbar-root {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .MuiTypography-root {
+    flex-grow: 1;
+    text-align: center;
+  }
+  
   
