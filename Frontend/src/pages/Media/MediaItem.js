@@ -8,7 +8,11 @@ const MediaItem = () => {
   return (
     <div className="media-item">
       <h1>{item.title}</h1>
-      <img src={item.img} alt={item.title} style={{ width: '100%' }} />
+      {item.type === 'image' ? (
+        <img src={item.img} alt={item.title} style={{ width: '100%' }} />
+      ) : (
+        <video src={item.video} controls style={{ width: '100%' }} />
+      )}
     </div>
   );
 };
