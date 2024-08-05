@@ -5,7 +5,7 @@ from datetime import timedelta
 
 load_dotenv()
 
-service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+# service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 client = storage.Client()
 # buckets = list(client.list_buckets())
 # for bucket in buckets:
