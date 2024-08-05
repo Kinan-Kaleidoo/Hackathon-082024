@@ -1,8 +1,9 @@
 from dotenv import load_dotenv
-load_dotenv()
 import os
 from google.cloud import storage
 from datetime import timedelta
+
+load_dotenv()
 
 service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 client = storage.Client()
@@ -19,6 +20,7 @@ client = storage.Client()
 #     for prefix in blobs.prefixes:
 #         print(prefix)
 
+
 def generate_signed_url(bucket_name, object_name, expiration_minutes=15):
     """Generates a signed URL for the specified object."""
     storage_client = storage.Client()
@@ -29,6 +31,7 @@ def generate_signed_url(bucket_name, object_name, expiration_minutes=15):
 
     print(f"The signed URL for the image is: {url}")
     return url
+
 
 def upload_image_to_folder(bucket_name, source_file_path, destination_blob_name):
     """Uploads an image to a specific folder in a GCS bucket."""
