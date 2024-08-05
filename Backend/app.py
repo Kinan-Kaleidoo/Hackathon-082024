@@ -7,7 +7,6 @@ import os
 from dotenv import load_dotenv
 
 import warnings
-
 warnings.filterwarnings('ignore')
 
 load_dotenv()
@@ -23,7 +22,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'  # Redirect to the login view if not authenticated
 login_manager.login_message = "צריכים להיות מחוברים כדי לגשת לדף זה"
 mongo_username = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-
 
 
 @login_manager.user_loader
