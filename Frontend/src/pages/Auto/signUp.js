@@ -18,19 +18,10 @@ import Kaleidoo from '../../assets/images/kaleidoo.png';
 
 const defaultTheme = createTheme();
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      Kaleidoo <b />
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 function SignUp() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -62,9 +53,11 @@ function SignUp() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const userData = {
+      username: formData.get('username') || username,
       email: formData.get('email'),
       password: formData.get('password')
     };
+    console.log(userData);
 
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -101,7 +94,7 @@ function SignUp() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 4,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -114,6 +107,18 @@ function SignUp() {
             Sign Up
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
+              autoFocus
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <TextField
               margin="normal"
               required
@@ -177,10 +182,10 @@ function SignUp() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
   );
 }
 
 export default SignUp;
+

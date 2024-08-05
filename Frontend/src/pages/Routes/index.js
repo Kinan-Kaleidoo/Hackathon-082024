@@ -36,7 +36,7 @@ const HomePage = () => {
               <Route path="/" element={<ChatPage />} />
             </Routes>
           </main>
-          <Footer />
+          <Footer sx={{ mt: 8, mb: 4 }}/>
         </div>
       </div>
     </Router>
