@@ -1,11 +1,15 @@
 import React from 'react';
+import Typography from '@mui/material/Typography';
 import './Footer.css';
 
-const Footer = () => {
+const Footer = (props) => {
   return (
-    <footer className="footer">
-      <p>© 2024 Multi-Modal Chat App</p>
-    </footer>
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      Kaleidoo <b />
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
   );
 };
 

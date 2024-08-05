@@ -18,17 +18,6 @@ import { useNavigate} from "react-router-dom";
 
 const defaultTheme = createTheme();
 
-function Copyright(props) {
-
-    return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-            aleidoo <b/>
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
 
 function SignIn(){
 
@@ -41,7 +30,7 @@ function SignIn(){
           email: data.get('email'),
           password: data.get('password'),
         });
-        navigate('/Home')
+        navigate('/')
 
       };
     
@@ -105,7 +94,6 @@ function SignIn(){
                 </Grid>
               </Box>
             </Box>
-            <Copyright sx={{ mt: 8, mb: 4 }} />
           </Container>
         </ThemeProvider>
       );
