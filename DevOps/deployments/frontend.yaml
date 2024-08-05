@@ -13,7 +13,7 @@ spec:
         app: app-frontend
     spec:
       containers:
-      - name: app-frontend
+      - name: frontend
         image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/frontend:$SHORT_SHA
         ports:
         - containerPort: 3000

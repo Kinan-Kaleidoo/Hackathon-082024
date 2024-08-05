@@ -13,7 +13,7 @@ spec:
         app: app-nlp
     spec:
       containers:
-      - name: app-nlp
+      - name: nlp
         image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/nlp:$SHORT_SHA
         ports:
         - containerPort: 5005

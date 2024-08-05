@@ -13,7 +13,7 @@ spec:
         app: app-docs
     spec:
       containers:
-      - name: app-docs
+      - name: docs
         image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/docs:$SHORT_SHA
         ports:
         - containerPort: 5000
