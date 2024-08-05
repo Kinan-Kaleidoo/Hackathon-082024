@@ -1,0 +1,14 @@
+Flask==3.0.3
+Flask-Login==0.6.3
+gcloud==0.18.3
+google-api-core==2.19.1
+google-auth==2.32.0
+google-cloud==0.34.0
+google-cloud-core==2.4.1
+google-cloud-storage==2.18.0
+pymongo==4.8.0
+python-dotenv==1.0.1
+python-magic==0.4.27
+requests==2.32.3
+storage==0.0.4.3
+Werkzeug==3.0.3
