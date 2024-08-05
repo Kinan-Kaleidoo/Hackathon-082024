@@ -4,7 +4,12 @@ from google.cloud import storage
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_login import login_required
+from datetime import timedelta
 
+# Initialize Flask app
+app = Flask(__name__)
+
+# Load environment variables
 load_dotenv()
 
 # Initialize Google Cloud Storage client
@@ -14,122 +19,125 @@ if not bucket_name:
     raise ValueError("Environment variable GOOGLE_CLOUD_BUCKET_NAME not set.")
 bucket = storage_client.bucket(bucket_name)
 
-
-def media():
-    if request.method == "POST":
-        if 'file' not in request.files:
-            return jsonify({"error": "No file part"}), 400
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify({"error": "No selected file"}), 400
-        if file:
-            # Read the file content
-            file_content = file.read()
-            # Use python-magic to detect the file type from the file content
-            mime = magic.Magic(mime=True)
-            file_type = mime.from_buffer(file_content)
-            # Check if the file type is an image or video
-            if file_type.startswith('image/'):
-                return serve_image(file)
-            elif file_type.startswith('video/'):
-                return serve_video(file)
-            else:
-                return jsonify({"error": "File is not an image or video", "media_type": file_type}), 400
-        return jsonify({"error": "No file provided"}), 400
-    else:
-        # to add call from gallery to all his pictures or videos
-        return jsonify("good"), 200
+# Define allowed MIME types
+ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif"]
+ALLOWED_VIDEO_TYPES = ["video/mp4", "video/quicktime", "video/x-msvideo", "video/x-matroska"]
+ALLOWED_AUDIO_TYPES = ["audio/mpeg", "audio/wav", "audio/wave", "audio/x-wav", "audio/ogg"]
+ALLOWED_TEXT_TYPES = ["text/plain", "application/octet-stream"]
+ALLOWED_DOC_TYPES = ["application/pdf", "text/plain",
+                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]
 
 
-def serve_image(image):
-    image.seek(0)
-    public_url = upload_to_gcs(image, image.filename)
-    return jsonify({"message": "File uploaded successfully", "file_url": public_url}), 200
-
-
-def upload_to_gcs(file, destination_blob_name):
-    """Uploads a file to the GCS bucket."""
+def upload_file_to_gcs(file, destination_blob_name):
+    """Uploads a file to a specific folder in a GCS bucket."""
     blob = bucket.blob(destination_blob_name)
-    blob.upload_from_file(file)
+    blob.upload_from_file(file, content_type=file.content_type)
+    print(f"File uploaded to {destination_blob_name} in bucket {bucket_name}.")
     return blob.public_url
 
 
-def serve_video(video):
-    public_url = upload_to_gcs(video, video.filename)
-    return jsonify({"message": "File uploaded successfully", "file_url": public_url}), 200
-
-
 @login_required
-def search():
-    print()
+def media():
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    # Use python-magic to detect the file type
+    mime = magic.Magic(mime=True)
+    file_type = mime.from_buffer(file.read())
+    file.seek(0)  # Reset file pointer after reading
+
+    if file_type in ALLOWED_IMAGE_TYPES:
+        destination_blob_name = f"media/images/{file.filename}"
+    elif file_type in ALLOWED_VIDEO_TYPES:
+        destination_blob_name = f"media/videos/{file.filename}"
+    else:
+        return jsonify({"error": "File is not an image or video", "file_type": file_type}), 400
+
+    public_url = upload_file_to_gcs(file, destination_blob_name)
+    return jsonify(
+        {"message": "File uploaded successfully", "path": destination_blob_name, "file_url": public_url}), 200
 
 
 @login_required
 def doc():
-    if request.method == "POST":
-        if 'file' not in request.files:
-            return jsonify({"error": "No file part"}), 400
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify({"error": "No selected file"}), 400
-        if file:
-            file_content = file.read()
-            mime = magic.Magic(mime=True)
-            file_type = mime.from_buffer(file_content)
-            if file_type in ["application/pdf", "text/plain", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"]:
-                return jsonify({"filename": file.filename, "format": file_type}), 200
-            else:
-                return jsonify({"error": "File is not a PDF, TXT, or WORD document", "file_type": file_type}), 400
-        return jsonify({"error": "No file provided"}), 400
-    else:
-        return jsonify("good"), 200
-      
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
 
-# @login_required
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    # Use python-magic to detect the file type
+    mime = magic.Magic(mime=True)
+    file_type = mime.from_buffer(file.read())
+    file.seek(0)  # Reset file pointer after reading
+
+    if file_type in ALLOWED_DOC_TYPES:
+        destination_blob_name = f"docs/{file.filename}"
+        public_url = upload_file_to_gcs(file, destination_blob_name)
+        return jsonify({"message": "Document file uploaded", "filename": file.filename, "file_url": public_url}), 200
+    else:
+        return jsonify({"error": "File is not a supported document type", "file_type": file_type}), 400
+
+
+@login_required
 def audio():
-    print()
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    if file.content_type in ALLOWED_AUDIO_TYPES:
+        destination_blob_name = f"audio/speeches/{file.filename}"
+        public_url = upload_file_to_gcs(file, destination_blob_name)
+        return jsonify({"message": "Audio file uploaded", "path": destination_blob_name, "file_url": public_url}), 200
+    else:
+        return jsonify({"error": "Invalid file type"}), 400
 
 
 @login_required
 def video():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return jsonify({"error": "No file part"}), 400
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify({"error": "No selected file"}), 400
-        if file and allowed_file_audio(file.content_type):
-            # Process the audio file here
-            return jsonify({"message": "Audio file received"}), 200
-        else:
-            return jsonify({"error": "Invalid file type"}), 400
-    return "Please upload an audio file", 200
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
+
+    if file.content_type in ALLOWED_VIDEO_TYPES:
+        destination_blob_name = f"media/videos/{file.filename}"
+        public_url = upload_file_to_gcs(file, destination_blob_name)
+        return jsonify({"message": "Video file uploaded", "path": destination_blob_name, "file_url": public_url}), 200
+    else:
+        return jsonify({"error": "Invalid file type"}), 400
 
 
+@login_required
 def audio_text():
-    if request.method == 'POST':
-        # Try to get text from JSON payload
-        if request.is_json:
-            data = request.get_json()
-            text = data.get('text', '')
-        else:
-            # Try to get text from form data
-            text = request.form.get('text', '')
+    if 'file' not in request.files:
+        return jsonify({"error": "No file part"}), 400
 
-        if not text:
-            return jsonify({"error": "No text provided"}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
 
-        # Optionally, validate the text (e.g., language, inappropriate content)
-        # Here, you can include any additional checks you need
-
-        # At this point, you have valid text to convert to audio
-        return jsonify({"message": "Text received", "text": text}), 200
-
-    elif request.method == 'GET':
-        # Handle GET requests if necessary
-        return "Please send a POST request with text data to convert to audio.", 200
+    if file.content_type in ALLOWED_TEXT_TYPES:
+        destination_blob_name = f"audio/texts/{file.filename}"
+        public_url = upload_file_to_gcs(file, destination_blob_name)
+        return jsonify({"message": "Text file uploaded", "path": destination_blob_name, "file_url": public_url}), 200
+    else:
+        return jsonify({"error": "Invalid file type"}), 400
 
 
-def allowed_file_audio(content_type):
-    allowed_mime_types = {'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4'}
-    return content_type in allowed_mime_types
+def search():
+    print()
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
