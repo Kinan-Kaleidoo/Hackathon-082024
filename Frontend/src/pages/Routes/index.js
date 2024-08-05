@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ChatPage from '../Chat/ChatPage';
 import MediaPage from '../Media/MediaPage';
-import DocumentPage from '../Documents/DocPage';
+import DocPage from '../Documents/DocPage';
 import Header from '../../components/Common/Header';
 import Footer from '../../components/Common/Footer';
 import Sidebar from '../../components/Common/Sidebar';
+import HomePage from '../Home/HomePage'; // Import the HomePage
 import AudioPage from '../Audio/AudioPage'; // Import the AudioPage
-import SignIn from '../Auto/signIn'
+import SignIn from '../Auto/signIn';
 import SignUp from '../Auto/signUp';
 
-// import './HomePage.css';
-
-const HomePage = () => {
+// Rename this component to avoid conflict
+const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -27,13 +27,13 @@ const HomePage = () => {
           <Header onMenuClick={toggleSidebar} />
           <main>
             <Routes>
-              <Route path="/signIn" element={<SignIn/>}/> 
-              <Route path="/signUp" element={<SignUp/>}/> 
+              <Route path="/" element={<HomePage />} /> {/* HomePage route */}
+              <Route path="/signIn" element={<SignIn />} />
+              <Route path="/signUp" element={<SignUp />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/media" element={<MediaPage />} />
-              <Route path="/documents" element={<DocumentPage />} />
-              <Route path="/audio" element={<AudioPage />} /> {/* Add route here */}
-              <Route path="/" element={<ChatPage />} />
+              <Route path="/doc" element={<DocPage />} />
+              <Route path="/audio" element={<AudioPage />} />
             </Routes>
           </main>
           <Footer />
@@ -43,4 +43,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default App;
