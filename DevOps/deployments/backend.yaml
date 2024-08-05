@@ -13,7 +13,7 @@ spec:
         app: app-backend
     spec:
       containers:
-      - name: app-backend
+      - name: backend
         image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/backend:$SHORT_SHA
         ports:
         - containerPort: 5000
