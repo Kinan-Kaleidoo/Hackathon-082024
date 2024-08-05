@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 
@@ -12,7 +12,9 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      <h1>Welcome to the Chat App</h1>
+      <Typography variant="h2" gutterBottom>
+        Welcome to the Chat App
+      </Typography>
       <Grid container spacing={3} justifyContent="center" alignItems="center">
         <Grid item xs={12} sm={6} md={3}>
           <Button

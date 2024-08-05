@@ -7,12 +7,11 @@ import DocPage from '../Documents/DocPage';
 import Header from '../../components/Common/Header';
 import Footer from '../../components/Common/Footer';
 import Sidebar from '../../components/Common/Sidebar';
-import HomePage from '../Home/HomePage'; // Import the HomePage
-import AudioPage from '../Audio/AudioPage'; // Import the AudioPage
+import HomePage from '../Home/homePage'; // Ensure this matches the actual file name
+import AudioPage from '../Audio/AudioPage';
 import SignIn from '../Auto/signIn';
 import SignUp from '../Auto/signUp';
 
-// Rename this component to avoid conflict
 const App = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -34,12 +33,11 @@ const App = () => {
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/media" element={<MediaPage />} />
               <Route path="/media/:title" element={<MediaItem />} />
-              <Route path="/" element={<ChatPage />} />
               <Route path="/doc" element={<DocPage />} />
               <Route path="/audio" element={<AudioPage />} />
             </Routes>
           </main>
-          <Footer sx={{ mt: 8, mb: 4 }}/>
+          <Footer sx={{ mt: 8, mb: 4 }} />
         </div>
       </div>
     </Router>
@@ -47,5 +45,3 @@ const App = () => {
 };
 
 export default App;
-
-

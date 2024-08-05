@@ -1,7 +1,6 @@
 // src/pages/Chat/ChatPage.js
 import React, { useState } from 'react';
 import './ChatPage.css';
-import SearchComponent from '../../components/SearchComponent';
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([
@@ -19,7 +18,6 @@ const ChatPage = () => {
 
   return (
     <div className="chat-page">
-      <SearchComponent />
       <div className="chat-container">
         <div className="chat-header">
           <h1>Chat</h1>

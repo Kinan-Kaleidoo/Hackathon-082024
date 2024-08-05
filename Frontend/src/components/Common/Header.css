@@ -1,29 +1,25 @@
-.header {
-    background-color: #1976d2; /* MUI primary color */
-    color: white;
-  }
-  
-  .header .toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .header .title {
-    flex-grow: 1;
-  }
-  .MuiAppBar-root {
-    background-color: #3f51b5; /* Customize color as needed */
-  }
-  
-  .MuiToolbar-root {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .MuiTypography-root {
-    flex-grow: 1;
-    text-align: center;
-  }
-  
-  
+/* Header.css */
+.MuiAppBar-root {
+  background-color: #1976d2; /* MUI primary color */
+}
+
+.MuiToolbar-root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.MuiTypography-root {
+  flex-grow: 1;
+  text-align: center;
+  color: white;
+}
+
+.MuiIconButton-root {
+  color: white;
+}
+
+.MuiLink-root {
+  text-decoration: none;
+  color: inherit;
+}

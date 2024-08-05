@@ -1,13 +1,39 @@
+/* HomePage.css */
 .home-page {
-  text-align: center;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  min-height: 100vh;
   padding: 20px;
-  flex: 1; /* Ensures the content takes up available space */
+  font-family: 'Roboto', sans-serif;
 }
 
 .home-page h1 {
+  color: #333;
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.home-page .MuiGrid-item {
-  margin-bottom: 20px;
+.home-page .MuiButton-root {
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.MuiButton-contained {
+  text-transform: none;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.footer {
+  background-color: #282c34;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
 }

@@ -1,6 +1,6 @@
 .sidebar {
   width: 240px;
-  background-color: #f5f5f5; /* Light grey */
+  background-color: #3b7198; /* Light grey */
   transition: transform 0.3s ease, width 0.3s ease;
   position: fixed;
   top: 0;

@@ -1,9 +1,33 @@
 .document-page {
-    padding: 20px;
-  }
-  
-  .document-page .paper {
-    padding: 20px;
-    margin-top: 20px;
-  }
-  
+  padding: 20px;
+}
+
+.document-page .paper {
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.upload-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.upload-section input {
+  flex-grow: 1;
+}
+
+.doc-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.doc-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  width: calc(33% - 20px);
+  box-sizing: border-box;
+}
