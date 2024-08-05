@@ -1,38 +1,33 @@
 import os
 import json
-import requests
 from flask import Flask, request, jsonify
 from google.cloud import documentai_v1 as documentai
 from google.cloud import storage
+from io import BytesIO
 
 app = Flask(__name__)
 
 # Set the environment variable for Google Cloud authentication
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "Hakathon_key.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "Docs/Hakathon_key.json"
 
-# Function to download a file from a URL
-def download_file_from_url(url, local_path):
-    response = requests.get(url)
-    if response.status_code == 200:
-        with open(local_path, 'wb') as file:
-            file.write(response.content)
-    else:
-        raise Exception(f"Failed to download file from URL: {url}")
+# Function to download a file from Google Cloud Storage
+def download_blob(bucket_name, blob_name):
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(blob_name)
+    file_content = blob.download_as_bytes()
+    return file_content
 
 # Function to process a document using Google Document AI
-def process_document_sample(project_id, location, processor_id, file_path, mime_type):
+def process_document_sample(project_id, location, processor_id, file_content, mime_type):
     client_options = {"api_endpoint": "eu-documentai.googleapis.com"}
     client = documentai.DocumentProcessorServiceClient(client_options=client_options)
-
-    # Read the document content
-    with open(file_path, "rb") as file:
-        document_content = file.read()
 
     # Configure the request
     name = f"projects/{project_id}/locations/{location}/processors/{processor_id}"
     request = documentai.ProcessRequest(
         name=name,
-        raw_document=documentai.RawDocument(content=document_content, mime_type=mime_type)
+        raw_document=documentai.RawDocument(content=file_content, mime_type=mime_type)
     )
 
     # Process the document
@@ -57,9 +52,9 @@ def extract_entities(document):
     return entities
 
 # Function to convert the extracted data to JSON
-def convert_to_json(file_path, google_text, entities):
+def convert_to_json(file_name, google_text, entities):
     data = {
-        "file_name": os.path.basename(file_path),
+        "file_name": file_name,
         "google_text": google_text,
         "entities": entities
     }
@@ -72,22 +67,22 @@ def process_document():
         return jsonify({"error": "No file URL provided"}), 400
 
     file_url = data['file_url']
-    file_name = file_url.split("/")[-1]
-    file_path = f"/tmp/{file_name}"
+    bucket_name, blob_name = parse_gcs_url(file_url)
 
     try:
-        # Download the file from the provided URL
-        download_file_from_url(file_url, file_path)
+        # Download the file from Google Cloud Storage
+        file_content = download_blob(bucket_name, blob_name)
+        file_name = os.path.basename(blob_name)
+        mime_type = "application/pdf"  # Update MIME type if needed
 
         project_id = "151720227861"  # Your project ID
         location = "eu"  # Your processor location
         processor_id = "ebabe2c425bfb7c4"  # Your processor ID
-        mime_type = "application/pdf"  # MIME type of your document
 
         # Extract entities with Google Document AI
-        google_text, entities = process_document_sample(project_id, location, processor_id, file_path, mime_type)
+        google_text, entities = process_document_sample(project_id, location, processor_id, file_content, mime_type)
         # Convert to JSON
-        json_output = convert_to_json(file_path, google_text, entities)
+        json_output = convert_to_json(file_name, google_text, entities)
 
         response = jsonify(json.loads(json_output))
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
@@ -96,6 +91,13 @@ def process_document():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+def parse_gcs_url(url):
+    """Parse a GCS URL into bucket name and blob name."""
+    if not url.startswith("gs://"):
+        raise ValueError("Invalid URL format. Must start with gs://")
+    path = url[len("gs://"):]
+    bucket_name, blob_name = path.split("/", 1)
+    return bucket_name, blob_name
 
 if __name__ == '__main__':
     app.run(debug=True)
