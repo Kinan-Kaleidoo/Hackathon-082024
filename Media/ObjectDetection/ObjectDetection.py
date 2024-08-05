@@ -1,29 +1,16 @@
 import cv2
-import numpy as np
-from google.cloud import storage
+from typing import Tuple, List
 from ultralytics import YOLO
-import os
 
-def upload_to_gcp_bucket(bucket_name, source_file_name, destination_blob_name):
-    """Uploads a file to the GCP bucket."""
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob_name)
-
-    blob.upload_from_filename(source_file_name)
-
-    print(f"File {source_file_name} uploaded to {destination_blob_name}.")
-
-def obj_detection_image(img_url, bucket_name):
+def obj_detection_image(img_url: str) -> Tuple[str, List[str]]:
     """
-    Perform object detection on an image and return the annotated image and detected objects with high confidence.
+    Perform object detection on an image and return the path of the annotated image and detected objects with high confidence.
     
     Args:
         img_url (str): Path or URL to the image file.
-        bucket_name (str): GCP bucket name.
     
     Returns:
-        Tuple[str, List[str]]: The URL of the annotated image in the GCP bucket and a list of detected objects.
+        Tuple[str, List[str]]: The path of the annotated image and a list of detected objects.
     """
     # Load the image
     image = cv2.imread(img_url)
@@ -69,26 +56,19 @@ def obj_detection_image(img_url, bucket_name):
     # Save the annotated image locally
     annotated_image_path = 'annotated_image.jpg'
     cv2.imwrite(annotated_image_path, image)
-    
-    # Upload the annotated image to the GCP bucket
-    destination_blob_name = os.path.basename(annotated_image_path)
-    upload_to_gcp_bucket(bucket_name, annotated_image_path, destination_blob_name)
-    
-    # Get the public URL of the uploaded image
-    annotated_image_url = f"https://storage.googleapis.com/{bucket_name}/{destination_blob_name}"
-    
-    return annotated_image_url, detected_objects
 
-def obj_detection_video(video_url, bucket_name):
+    return annotated_image_path, detected_objects
+
+
+def obj_detection_video(video_url: str) -> Tuple[str, List[str]]:
     """
-    Perform object detection on a video and return the annotated video and detected objects with high confidence.
+    Perform object detection on a video and return the path of the annotated video and detected objects with high confidence.
     
     Args:
         video_url (str): Path or URL to the video file.
-        bucket_name (str): GCP bucket name.
     
     Returns:
-        Tuple[str, List[str]]: The URL of the annotated video in the GCP bucket and a list of detected objects for each frame.
+        Tuple[str, List[str]]: The local path of the annotated video and a list of detected objects for each frame.
     """
     # Load the video
     video = cv2.VideoCapture(video_url)
@@ -105,9 +85,9 @@ def obj_detection_video(video_url, bucket_name):
     
     # Define codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # You can use other codecs if needed
-    out = cv2.VideoWriter('annotated_video.mp4', fourcc, fps, (frame_width, frame_height))
+    annotated_video_path = 'annotated_video.mp4'
+    out = cv2.VideoWriter(annotated_video_path, fourcc, fps, (frame_width, frame_height))
     
-    frame_count = 0
     all_detected_objects = []
 
     while video.isOpened():
@@ -151,20 +131,9 @@ def obj_detection_video(video_url, bucket_name):
         
         # Write the annotated frame to the output video
         out.write(frame)
-        
-        # Increment frame count
-        frame_count += 1
     
     # Release video objects
     video.release()
     out.release()
     
-    # Upload the annotated video to the GCP bucket
-    annotated_video_path = 'annotated_video.mp4'
-    destination_blob_name = os.path.basename(annotated_video_path)
-    upload_to_gcp_bucket(bucket_name, annotated_video_path, destination_blob_name)
-    
-    # Get the public URL of the uploaded video
-    annotated_video_url = f"https://storage.googleapis.com/{bucket_name}/{destination_blob_name}"
-    
-    return annotated_video_url, all_detected_objects
+    return annotated_video_path, all_detected_objects
