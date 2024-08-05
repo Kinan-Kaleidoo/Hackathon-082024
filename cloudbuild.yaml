@@ -7,14 +7,16 @@ steps:
     args:
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPOSITORY}/${_IMAGE_NAME}:latest'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:latest'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA'
       - '${_SERVICE_DIR}'
 
   # Push the image tagged as 'latest' to the registry
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPOSITORY}/${_IMAGE_NAME}:latest'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA'
 
   # Get credentials for the Kubernetes cluster, apply deployments and update the Kubernetes deployment's image
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -22,9 +24,9 @@ steps:
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials ${_PROJECT_ID} --region=${_REGION} --project=${_PROJECT_ID} &&
+        gcloud container clusters get-credentials $PROJECT_ID --region=${_REGION} --project=$PROJECT_ID &&
         kubectl apply -f DevOps/${_SERVICE_DIR}.yaml &&
-        kubectl set image deployment/${_IMAGE_NAME}-deployment ${_IMAGE_NAME}=${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPOSITORY}/${_IMAGE_NAME}:latest --namespace=default
+        kubectl set image deployment/app-${_IMAGE_NAME} ${_IMAGE_NAME}=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA --namespace=default
 
 images:
-  - '${_REGION}-docker.pkg.dev/${_PROJECT_ID}/${_REPOSITORY}/${_IMAGE_NAME}:latest'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA'
