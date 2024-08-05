@@ -10,7 +10,7 @@ import './Sidebar.css'; // Import the updated CSS file
 
 const Sidebar = ({ open, onClose }) => {
   return (
-    <div className={`sidebar ${open ? 'open' : ''}`}>
+    <div className={`sidebar ${open ? '' : 'closed'}`}>
       <List>
         <ListItem button component={Link} to="/" onClick={onClose}>
           <HomeIcon />

@@ -1,0 +1,20 @@
+/* index.css */
+
+.app-container {
+    display: flex;
+  }
+  
+  .main-content {
+    margin-left: 0; /* Default margin for when sidebar is closed */
+    transition: margin-left 0.3s ease; /* Smooth transition */
+    flex-grow: 1; /* Ensures content takes available space */
+  }
+  
+  .main-content.shrink {
+    margin-left: 240px; /* Margin for when sidebar is open */
+  }
+  
+  header, footer {
+    width: 100%;
+  }
+  

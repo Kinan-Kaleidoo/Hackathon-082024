@@ -21,9 +21,9 @@ const App = () => {
 
   return (
     <Router>
-      <div style={{ display: 'flex' }}>
+      <div className="app-container">
         <Sidebar open={sidebarOpen} onClose={toggleSidebar} />
-        <div style={{ flexGrow: 1 }}>
+        <div className={`main-content ${sidebarOpen ? '' : 'shrink'}`}>
           <Header onMenuClick={toggleSidebar} />
           <main>
             <Routes>
@@ -44,3 +44,5 @@ const App = () => {
 };
 
 export default App;
+
+
