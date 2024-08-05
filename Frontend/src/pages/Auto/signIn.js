@@ -18,17 +18,6 @@ import { useNavigate} from "react-router-dom";
 
 const defaultTheme = createTheme();
 
-function Copyright(props) {
-
-    return (
-      <Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'Copyright © '}
-            aleidoo <b/>
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
 
 function SignIn(){
 
@@ -41,7 +30,28 @@ function SignIn(){
           email: data.get('email'),
           password: data.get('password'),
         });
-        navigate('/Home')
+
+        fetch('http://localhost:5000/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userData: data }),
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log(data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+    
+        navigate('/')
 
       };
     
@@ -105,7 +115,6 @@ function SignIn(){
                 </Grid>
               </Box>
             </Box>
-            <Copyright sx={{ mt: 8, mb: 4 }} />
           </Container>
         </ThemeProvider>
       );
