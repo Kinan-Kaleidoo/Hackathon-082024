@@ -9,7 +9,8 @@ app = Flask(__name__)
 
 model = load_model()
 
-@app.route('/ms/transcribe', methods=['POST'])
+
+@app.route('/ms/stt', methods=['POST'])
 def transcribe():
     if 'file' not in request.files:
         return jsonify({"error": "No file part"}), 400
@@ -44,9 +45,7 @@ def transcribe():
     full_text = []
     for segment in segments:
         full_text.append(segment.text)
-        for word_info in segment.words:
-            word_timestamps.append(word_info.start)
-            word_timestamps.append(word_info.end)
+        word_timestamps.extend((word_info.start, word_info.end) for word_info in segment.words)
 
     response = {
         "text": " ".join(full_text).strip(),
@@ -54,7 +53,11 @@ def transcribe():
     }
 
     response_json = json.dumps(response, ensure_ascii=False)
+    if os.path.exists(video_path):
+        os.remove(video_path)
+    os.remove(audio_output_path), os.rmdir("static")
     return Response(response_json, content_type="application/json; charset=utf-8")
 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=6060, host='0.0.0.0')

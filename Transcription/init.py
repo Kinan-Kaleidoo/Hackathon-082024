@@ -1,6 +1,7 @@
 import torch
 from faster_whisper import WhisperModel
 
+
 # Initialize the Whisper model
 def load_model():
     if torch.cuda.is_available():

@@ -1,10 +1,12 @@
 import subprocess
 
 # Allowed extensions
-ALLOWED_EXTENSIONS = {'mp3', 'wav', 'mp4', 'opus'}
+ALLOWED_EXTENSIONS = {'mp3', 'wav', 'avi', 'mov', 'mp4', 'opus', 'ogg'}
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 # Function to extract audio from video
 def extract_audio_from_video(video_path: str, audio_output_path: str) -> None:
