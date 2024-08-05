@@ -14,14 +14,9 @@ spec:
     spec:
       containers:
       - name: app-backend
-        # image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/<IMG>:latest
+        image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/backend:$SHORT_SHA
         ports:
-        - containerPort: 8080
-        # envFrom:
-        # - secretRef:
-        #     name: secret-backend
-        # - configMapRef:
-        #     name: configmap-backend
+        - containerPort: 5000
 
 ---
 
@@ -36,4 +31,4 @@ spec:
   ports:
     - protocol: TCP
       port: 8082
-      targetPort: 8080
+      targetPort: 5000

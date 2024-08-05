@@ -14,14 +14,9 @@ spec:
     spec:
       containers:
       - name: app-media
-        # image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/<IMG>:latest
+        image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/media:$SHORT_SHA
         ports:
         - containerPort: 8080
-        # envFrom:
-        # - secretRef:
-        #     name: secret-backend
-        # - configMapRef:
-        #     name: configmap-backend
 
 ---
 
@@ -36,4 +31,4 @@ spec:
   ports:
     - protocol: TCP
       port: 8086
-      targetPort: 8000
+      targetPort: 8080

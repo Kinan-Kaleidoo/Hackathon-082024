@@ -14,14 +14,9 @@ spec:
     spec:
       containers:
       - name: app-transcription
-        # image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/<IMG>:latest
+        image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/transcription:$SHORT_SHA
         ports:
-        - containerPort: 8080
-        # envFrom:
-        # - secretRef:
-        #     name: secret-backend
-        # - configMapRef:
-        #     name: configmap-backend
+        - containerPort: 5000
 
 ---
 
@@ -36,4 +31,4 @@ spec:
   ports:
     - protocol: TCP
       port: 8087
-      targetPort: 8000
+      targetPort: 5000

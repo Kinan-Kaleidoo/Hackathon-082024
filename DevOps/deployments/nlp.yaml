@@ -14,14 +14,9 @@ spec:
     spec:
       containers:
       - name: app-nlp
-        # image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/<IMG>:latest
+        image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/nlp:$SHORT_SHA
         ports:
         - containerPort: 5005
-        # envFrom:
-        # - secretRef:
-        #     name: secret-backend
-        # - configMapRef:
-        #     name: configmap-backend
 
 ---
 
