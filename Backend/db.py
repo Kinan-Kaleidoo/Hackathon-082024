@@ -5,7 +5,6 @@ from models import User
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
-import pandas as pd
 from flask_login import current_user
 
 load_dotenv()

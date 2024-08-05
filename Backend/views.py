@@ -1,74 +1,92 @@
 import os
-from flask import render_template, request, redirect, session, url_for, jsonify
-import requests
-from db import  find_user_by_username, users_collection
-import pandas as pd
-import yfinance as yf
-import datetime as dt
-import numpy as np
-import pandas as pd
-from matplotlib import style
-from statsmodels.tsa.seasonal import STL
-from sklearn.metrics import mean_squared_error, accuracy_score
-from iexfinance.stocks import Stock
+
+from flask import request, jsonify
+import magic
 from flask_login import login_required
-from db import find_user_by_username, update_prefernces, buy_share1, get_user_purchases
+from google.cloud import storage
+from dotenv import load_dotenv
 
+load_dotenv()
 
-from flask_login import login_required
-from bson.objectid import ObjectId
+# service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+# client = storage.Client()
+# buckets = list(client.list_buckets())
+# for bucket in buckets:
+#     print(bucket.name)
 
+# Initialize Google Cloud Storage client
+storage_client = storage.Client()
+bucket_name = os.getenv('GOOGLE_CLOUD_BUCKET_NAME')
+if not bucket_name:
+    raise ValueError("Environment variable GOOGLE_CLOUD_BUCKET_NAME not set.")
+bucket = storage_client.bucket(bucket_name)
 
-_df = pd.read_csv('companylist.csv')
-df = _df.copy()
 
 def login():
-    return render_template('login.html')
+    print()
 
-
-@login_required
-def company_chart():
-    company_name = request.args.get('company')
-    share = request.args.get('share')  
-    actual_date = dt.date.today()
-    past_date = actual_date - dt.timedelta(days=365 * 5)
-    actual_date = actual_date.strftime("%Y-%m-%d")
-    past_date = past_date.strftime("%Y-%m-%d")
-    data = yf.download(share, start=past_date, end=actual_date)
-    df = pd.DataFrame(data).reset_index()
-    # company_data = df[df['Company'] == company_name]
-    def format_data(company_data):
-        return {
-            'dates': company_data['Date'].tolist(),
-            'closes': company_data['Close'].tolist(),
-            'opens': company_data['Open'].tolist(),
-            'highs': company_data['High'].tolist(),
-            'lows': company_data['Low'].tolist()
-        }
-    data = format_data(df)
-    return render_template('chart.html', company=company_name, share=share,  data1=data)
 
 @login_required
 def index():
+    print()
 
-    return render_template('index.html')
 
-@login_required
 def media():
-    return render_template('index.html')
+    if request.method == "POST":
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+        if file:
+            # Read the file content
+            file_content = file.read()
+            # Use python-magic to detect the file type from the file content
+            mime = magic.Magic(mime=True)
+            file_type = mime.from_buffer(file_content)
+            # Check if the file type is an image or video
+            if file_type.startswith('image/'):
+                return serve_image(file)
+            elif file_type.startswith('video/'):
+                return serve_video(file)
+            else:
+                return jsonify({"error": "File is not an image or video", "media_type": file_type}), 400
+        return jsonify({"error": "No file provided"}), 400
+    else:
+        # to add call from gallery to all his pictures or videos
+        return jsonify("good"), 200
+
+
+def serve_image(image):
+    image.seek(0)
+    public_url = upload_to_gcs(image, image.filename)
+    return jsonify({"message": "File uploaded successfully", "file_url": public_url}), 200
+
+
+def upload_to_gcs(file, destination_blob_name):
+    """Uploads a file to the GCS bucket."""
+    blob = bucket.blob(destination_blob_name)
+    blob.upload_from_file(file)
+    return blob.public_url
+
+
+def serve_video(video):
+    public_url = upload_to_gcs(video, video.filename)
+    return jsonify({"message": "File uploaded successfully", "file_url": public_url}), 200
+
 
 @login_required
 def search():
-    return render_template('index.html')
+    print()
 
 @login_required
 def doc():
-    return render_template('index.html')
+    print()
 
 @login_required
 def audio():
-    return render_template('index.html')
+    print()
 
 @login_required
 def video():
-    return render_template('index.html')
+    print()
