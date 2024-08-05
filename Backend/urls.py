@@ -1,4 +1,4 @@
-from views import index, media, doc, search,audio,video
+from views import index, media, doc, search, audio, audio_text, video
 from auth import register, login, logout
 
 
@@ -12,6 +12,7 @@ def configure_routes(app):
     app.add_url_rule('/search', 'search', search, methods=["GET", "POST"])
     app.add_url_rule('/doc', 'doc', doc, methods=["GET", "POST"])
     app.add_url_rule('/audio', 'audio', audio, methods=["GET", "POST"])
+    app.add_url_rule('/audio_text', 'audio_text', audio_text, methods=["GET", "POST"])
     app.add_url_rule('/video', 'video', video, methods=["GET", "POST"])
 
 
