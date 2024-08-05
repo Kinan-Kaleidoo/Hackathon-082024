@@ -1,6 +1,8 @@
 import React from 'react';
 import DocumentGallery from './DocGallery';
 import { Container, Typography, Paper } from '@mui/material';
+import SearchComponent from '../../components/SearchComponent';
+
 import './DocPage.css';
 
 const DocPage = () => {
@@ -12,6 +14,8 @@ const DocPage = () => {
         </Typography>
         <DocumentGallery />
       </Paper>
+      <SearchComponent />
+
     </Container>
   );
 };
