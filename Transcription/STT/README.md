@@ -77,14 +77,15 @@ This is a Flask-based service that performs speech-to-text transcription on audi
 - **Body:** A JSON object containing the transcription text and word-level timestamps.
 
     ```json
-    {
-      "text": "Transcribed text from audio",
-      "timestamps": [
-        [start_time_1, end_time_1],
-        ["start_time_2", end_time_2],
-        ...
-      ]
-    }
+   {
+     "text": "Transcribed text from audio",
+     "timestamps": [
+       ["start_time_1", "end_time_1"],
+       ["start_time_2", "end_time_2"],
+       "...",
+       ["start_time_x", "end_time_x"]
+     ]
+   }
     ```
 
 **Example Request:**
