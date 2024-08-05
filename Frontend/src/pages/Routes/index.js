@@ -7,7 +7,7 @@ import DocPage from '../Documents/DocPage';
 import Header from '../../components/Common/Header';
 import Footer from '../../components/Common/Footer';
 import Sidebar from '../../components/Common/Sidebar';
-import HomePage from '../Home/HomePage'; // Import the HomePage
+// import HomePage from '../Home/HomePage'; // Import the HomePage
 import AudioPage from '../Audio/AudioPage'; // Import the AudioPage
 import SignIn from '../Auto/signIn';
 import SignUp from '../Auto/signUp';
@@ -28,7 +28,7 @@ const App = () => {
           <Header onMenuClick={toggleSidebar} />
           <main>
             <Routes>
-              <Route path="/" element={<HomePage />} /> {/* HomePage route */}
+              {/* <Route path="/" element={<HomePage />} />  */}
               <Route path="/signIn" element={<SignIn />} />
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/chat" element={<ChatPage />} />
