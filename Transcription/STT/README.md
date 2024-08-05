@@ -1,6 +1,6 @@
 # Speech-to-Text Transcription Service
 
-This is a Flask-based service that performs speech-to-text transcription on audio extracted from video files. It uses the Whisper model from the `faster_whisper` library to transcribe audio and provide word-level timestamps.
+This is a Flask-based service that performs speech-to-text transcription on audio files & audio extracted from video files. It uses the Whisper model from the `faster_whisper` library to transcribe audio and provide word-level timestamps.
 
 ## Table of Contents
 
@@ -64,12 +64,12 @@ This is a Flask-based service that performs speech-to-text transcription on audi
 
 #### `/ms/stt` (POST)
 
-**Description:** Transcribes audio extracted from a video file.
+**Description:** Transcribes audio files & audio extracted from a video file.
 
 **Request:**
 
 - **Content-Type:** `multipart/form-data`
-- **Body:** A file field named `file` containing the video file to be transcribed. Supported formats include `mp3`, `wav`, `avi`, `mov`, `mp4`, `opus`, and `ogg`.
+- **Body:** A file field named `file` containing the audio/video file to be transcribed. Supported formats include `mp3`, `wav`, `avi`, `mov`, `mp4`, and `opus`.
 
 **Response:**
 
