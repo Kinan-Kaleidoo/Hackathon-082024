@@ -81,7 +81,7 @@ This is a Flask-based service that performs speech-to-text transcription on audi
       "text": "Transcribed text from audio",
       "timestamps": [
         [start_time_1, end_time_1],
-        [start_time_2, end_time_2],
+        ["start_time_2", end_time_2],
         ...
       ]
     }
