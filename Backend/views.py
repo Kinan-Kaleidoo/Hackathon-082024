@@ -87,7 +87,18 @@ def doc():
 
 # @login_required
 def audio():
-    print()
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+        if file and allowed_file_audio(file.content_type):
+            # Process the audio file here
+            return jsonify({"message": "Audio file received"}), 200
+        else:
+            return jsonify({"error": "Invalid file type"}), 400
+    return "Please upload an audio file", 200
 
 
 @login_required
