@@ -7,6 +7,37 @@ load_dotenv()
 def list_files_and_generate_urls(bucket_name, folder_prefix):
     """List all files in a specified GCS bucket folder and generate their URLs in 'gs://' format."""
     # Initialize the Google Cloud Storage client
+# service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+client = storage.Client()
+# buckets = list(client.list_buckets())
+# for bucket in buckets:
+#     print(bucket.name)
+#
+# def list_folders(bucket_name):
+#     """Lists all the folders in the bucket."""
+#     storage_client = storage.Client()
+#     blobs = storage_client.list_blobs(bucket_name, delimiter='/')
+#
+#     print(f"Folders in bucket {bucket_name}:")
+#     for prefix in blobs.prefixes:
+#         print(prefix)
+
+
+def generate_signed_url(bucket_name, object_name, expiration_minutes=15):
+    """Generates a signed URL for the specified object."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(object_name)
+
+    url = blob.generate_signed_url(expiration=timedelta(minutes=expiration_minutes))
+
+    print(f"The signed URL for the image is: {url}")
+    return url
+
+
+def upload_image_to_folder(bucket_name, source_file_path, destination_blob_name):
+    """Uploads an image to a specific folder in a GCS bucket."""
+    # Initialize a storage client
     storage_client = storage.Client()
 
     # Get the bucket
