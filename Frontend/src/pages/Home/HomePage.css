@@ -1,6 +1,7 @@
 .home-page {
   text-align: center;
   padding: 20px;
+  flex: 1; /* Ensures the content takes up available space */
 }
 
 .home-page h1 {
