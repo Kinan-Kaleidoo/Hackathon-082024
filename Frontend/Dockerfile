@@ -20,6 +20,12 @@ EXPOSE 3000
 # Define environment variable for the production build
 ENV NODE_ENV=production
 
+# Set the environment variable to fix the OpenSSL issue
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
+# Print Node.js and npm versions
+RUN node -v && npm -v
+
 # Build the React app
 RUN npm run build
 
