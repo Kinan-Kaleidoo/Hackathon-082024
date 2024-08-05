@@ -1,6 +1,8 @@
 import React from 'react';
 import MediaGallery from './MediaGallery';
 import { Container, Typography, Paper } from '@mui/material';
+import SearchComponent from '../../components/SearchComponent';
+
 import './MediaPage.css';
 
 const MediaPage = () => {
@@ -12,6 +14,8 @@ const MediaPage = () => {
         </Typography>
         <MediaGallery />
       </Paper>
+      <SearchComponent />
+
     </Container>
   );
 };

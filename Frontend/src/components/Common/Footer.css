@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .footer-search {
@@ -15,3 +17,6 @@
 .footer-search .MuiTextField-root {
   margin-right: 8px;
 }
+
+
+
