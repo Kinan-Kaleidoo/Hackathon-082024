@@ -13,7 +13,7 @@ spec:
         app: app-media
     spec:
       containers:
-      - name: app-media
+      - name: media
         image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/media:$SHORT_SHA
         ports:
         - containerPort: 8080

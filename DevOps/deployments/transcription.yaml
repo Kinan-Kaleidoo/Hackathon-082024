@@ -13,7 +13,7 @@ spec:
         app: app-transcription
     spec:
       containers:
-      - name: app-transcription
+      - name: transcription
         image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/transcription:$SHORT_SHA
         ports:
         - containerPort: 5000
