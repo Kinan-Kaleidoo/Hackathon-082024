@@ -1,7 +1,7 @@
 import subprocess
 
 # Allowed extensions
-ALLOWED_EXTENSIONS = {'mp3', 'wav', 'avi', 'mov', 'mp4', 'opus', 'ogg'}
+ALLOWED_EXTENSIONS = {'mp3', 'wav', 'avi', 'mov', 'mp4', 'opus'}
 
 
 def allowed_file(filename):

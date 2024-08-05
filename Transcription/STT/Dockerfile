@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y ffmpeg
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code into the container
-COPY . /app
+COPY .. /app
 
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
