@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-docs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-docs
+  template:
+    metadata:
+      labels:
+        app: app-docs
+    spec:
+      containers:
+      - name: app-docs
+        # image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/<IMG>:latest
+        ports:
+        - containerPort: 8080
+        # envFrom:
+        # - secretRef:
+        #     name: secret-backend
+        # - configMapRef:
+        #     name: configmap-backend
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: docs-service
+spec:
+  type: ClusterIP
+  selector:
+    app: app-docs
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8080

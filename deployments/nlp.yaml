@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-nlp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-nlp
+  template:
+    metadata:
+      labels:
+        app: app-nlp
+    spec:
+      containers:
+      - name: app-nlp
+        # image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/<IMG>:latest
+        ports:
+        - containerPort: 5005
+        # envFrom:
+        # - secretRef:
+        #     name: secret-backend
+        # - configMapRef:
+        #     name: configmap-backend
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlp-service
+spec:
+  type: ClusterIP
+  selector:
+    app: app-nlp
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 5005
