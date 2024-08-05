@@ -1,17 +1,29 @@
-from ultralytics import YOLO
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
+from google.cloud import storage
+from ultralytics import YOLO
+import os
 
-def obj_detection_image(img_url):
+def upload_to_gcp_bucket(bucket_name, source_file_name, destination_blob_name):
+    """Uploads a file to the GCP bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.upload_from_filename(source_file_name)
+
+    print(f"File {source_file_name} uploaded to {destination_blob_name}.")
+
+def obj_detection_image(img_url, bucket_name):
     """
     Perform object detection on an image and return the annotated image and detected objects with high confidence.
     
     Args:
         img_url (str): Path or URL to the image file.
+        bucket_name (str): GCP bucket name.
     
     Returns:
-        Tuple[np.ndarray, List[Dict[str, Any]]]: The annotated image and a list of dictionaries with detected objects.
+        Tuple[str, List[str]]: The URL of the annotated image in the GCP bucket and a list of detected objects.
     """
     # Load the image
     image = cv2.imread(img_url)
@@ -54,29 +66,29 @@ def obj_detection_image(img_url):
     else:
         print("No bounding boxes found. Check the result structure.")
     
-    # Convert image from BGR to RGB format for consistency
-    annotated_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # Save the annotated image locally
+    annotated_image_path = 'annotated_image.jpg'
+    cv2.imwrite(annotated_image_path, image)
     
-    return annotated_image, detected_objects  # Returning annotated image and list of object labels
+    # Upload the annotated image to the GCP bucket
+    destination_blob_name = os.path.basename(annotated_image_path)
+    upload_to_gcp_bucket(bucket_name, annotated_image_path, destination_blob_name)
+    
+    # Get the public URL of the uploaded image
+    annotated_image_url = f"https://storage.googleapis.com/{bucket_name}/{destination_blob_name}"
+    
+    return annotated_image_url, detected_objects
 
-# # Example usage
-# img_url = 'dog_bycicle.jpg'
-# annotated_image, detected_objects = obj_detection_image(img_url)
-# print("Detected objects:", detected_objects)
-# # Display the image using matplotlib
-# plt.imshow(annotated_image)
-# plt.axis('off')  # Turn off axis numbers and ticks
-# plt.show()
-
-def obj_detection_video(video_url):
+def obj_detection_video(video_url, bucket_name):
     """
     Perform object detection on a video and return the annotated video and detected objects with high confidence.
     
     Args:
         video_url (str): Path or URL to the video file.
+        bucket_name (str): GCP bucket name.
     
     Returns:
-        List[str]: A list of labels of detected objects for each frame.
+        Tuple[str, List[str]]: The URL of the annotated video in the GCP bucket and a list of detected objects for each frame.
     """
     # Load the video
     video = cv2.VideoCapture(video_url)
@@ -147,19 +159,12 @@ def obj_detection_video(video_url):
     video.release()
     out.release()
     
-    return 'annotated_video.mp4', all_detected_objects
-
-# # Example usage
-# video_url = 'one-by-one-person-detection.mp4'
-# annotated_video_path, detected_objects = obj_detection_video(video_url)
-
-# print(f"Annotated video saved at: {annotated_video_path}")
-# print("Detected objects:", detected_objects)
-
-# # To display the annotated video frame by frame using matplotlib
-# annotated_video = cv2.VideoCapture(annotated_video_path)
-
-# while annotated_video.isOpened():
-#     ret, frame = annotated_video.read()
-#     if not ret:
-#         break
+    # Upload the annotated video to the GCP bucket
+    annotated_video_path = 'annotated_video.mp4'
+    destination_blob_name = os.path.basename(annotated_video_path)
+    upload_to_gcp_bucket(bucket_name, annotated_video_path, destination_blob_name)
+    
+    # Get the public URL of the uploaded video
+    annotated_video_url = f"https://storage.googleapis.com/{bucket_name}/{destination_blob_name}"
+    
+    return annotated_video_url, all_detected_objects
