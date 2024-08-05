@@ -1,41 +1,11 @@
 import os
-from flask import render_template, request, redirect, session, url_for, jsonify
-import requests
-from db import  find_user_by_username, users_collection
-
-from flask_login import login_required
-from db import find_user_by_username, update_prefernces, buy_share1, get_user_purchases
 import magic
-
-
-from db import  find_user_by_email, users_collection
-# import pandas as pd
-# import yfinance as yf
-# import datetime as dt
-# import numpy as np
-# import pandas as pd
-# from matplotlib import style
-# from statsmodels.tsa.seasonal import STL
-# from sklearn.metrics import mean_squared_error, accuracy_score
-# from iexfinance.stocks import Stock
-from flask_login import login_required
-from db import find_user_by_email
-
-from flask import request, jsonify
-import magic
-from flask_login import login_required
 from google.cloud import storage
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_login import login_required
 
 load_dotenv()
-
-# service_account_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-# client = storage.Client()
-# buckets = list(client.list_buckets())
-# for bucket in buckets:
-#     print(bucket.name)
 
 # Initialize Google Cloud Storage client
 storage_client = storage.Client()
@@ -44,21 +14,6 @@ if not bucket_name:
     raise ValueError("Environment variable GOOGLE_CLOUD_BUCKET_NAME not set.")
 bucket = storage_client.bucket(bucket_name)
 
-def login():
-    print()
-
-
-@login_required
-def index():
-    print()
-
-def login():
-    return None
-
-
-@login_required
-def index():
-    return None
 
 def media():
     if request.method == "POST":
@@ -108,6 +63,7 @@ def serve_video(video):
 def search():
     print()
 
+
 @login_required
 def doc():
     if request.method == "POST":
@@ -131,7 +87,19 @@ def doc():
 
 # @login_required
 def audio():
-    print()
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+        if file and allowed_file_audio(file.content_type):
+            # Process the audio file here
+            return jsonify({"message": "Audio file received"}), 200
+        else:
+            return jsonify({"error": "Invalid file type"}), 400
+    return "Please upload an audio file", 200
+
 
 @login_required
 def video():
@@ -147,6 +115,7 @@ def video():
         else:
             return jsonify({"error": "Invalid file type"}), 400
     return "Please upload an audio file", 200
+
 
 def audio_text():
     if request.method == 'POST':
@@ -175,7 +144,3 @@ def audio_text():
 def allowed_file_audio(content_type):
     allowed_mime_types = {'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4'}
     return content_type in allowed_mime_types
-
-@login_required
-def video():
-    return None
