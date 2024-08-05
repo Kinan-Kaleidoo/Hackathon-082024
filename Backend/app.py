@@ -1,22 +1,9 @@
-from flask import Flask, render_template, request, jsonify
-import pandas as pd
-import finnhub
-
-import numpy as np
-import pandas as pd
-import requests
-import tensorflow as tf
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as font_manager
-
+from flask import Flask
 import warnings
 warnings.filterwarnings('ignore')
-
-from flask import Flask
 from flask_login import LoginManager
 from urls import configure_routes
 from bson import ObjectId
-from dotenv import load_dotenv
 from db import users_collection,user_from_dict
 import os
 
