@@ -10,8 +10,30 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client['Hackathon']
 
-users_collection  = db['users']
+users_collection = db['users']
+nlp_collection = db['nlp_url']
+media_collection = db['media']
+audio_collection = db['audio']
+doc_collection = db['doc']
+search_collection = db['search']
 
+
+def add_media(document):
+    media_collection.insert_one(document)
+
+def get_document_by_url(url):
+    return nlp_collection.find_one({'url': url})
+
+
+def insert_document(document):
+    nlp_collection.insert_one(document)
+
+
+def update_document(url, new_data):
+    nlp_collection.update_one({'url': url}, {'$set': new_data})
+
+def add_nlp_url(url):
+    result = nlp_collection.insert_one({'url':url})
 
 def add_user(user):
     user_data = {
