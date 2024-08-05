@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes as RouterRoutes } from 'react-router-dom';
 import ChatPage from '../Chat/ChatPage';
 import MediaPage from '../Media/MediaPage';
 import MediaItem from '../Media/MediaItem';
@@ -7,13 +7,13 @@ import DocPage from '../Documents/DocPage';
 import Header from '../../components/Common/Header';
 import Footer from '../../components/Common/Footer';
 import Sidebar from '../../components/Common/Sidebar';
-// import HomePage from '../Home/HomePage'; // Import the HomePage
-import AudioPage from '../Audio/AudioPage'; // Import the AudioPage
-import SignIn from '../Auto/signIn';
-import SignUp from '../Auto/signUp';
+import HomePage from '../Home/homePage'
+import AudioPage from '../Audio/AudioPage'; 
+import SignIn from '../Auto/signIn'
+import SignUp from '../Auto/signUp'
 
 // Rename this component to avoid conflict
-const App = () => {
+const AppRoutes = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -27,8 +27,8 @@ const App = () => {
         <div className={`main-content ${sidebarOpen ? '' : 'shrink'}`}>
           <Header onMenuClick={toggleSidebar} />
           <main>
-            <Routes>
-              {/* <Route path="/" element={<HomePage />} />  */}
+            <RouterRoutes>
+              <Route path="/" element={<HomePage />} /> 
               <Route path="/signIn" element={<SignIn />} />
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/chat" element={<ChatPage />} />
@@ -37,15 +37,13 @@ const App = () => {
               <Route path="/" element={<ChatPage />} />
               <Route path="/doc" element={<DocPage />} />
               <Route path="/audio" element={<AudioPage />} />
-            </Routes>
+            </RouterRoutes>
           </main>
-          <Footer sx={{ mt: 8, mb: 4 }}/>
+          <Footer sx={{ mt: 8, mb: 4 }} />
         </div>
       </div>
     </Router>
   );
 };
 
-export default App;
-
-
+export default AppRoutes;
