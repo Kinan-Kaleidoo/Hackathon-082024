@@ -17,6 +17,10 @@ spec:
         image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/backend:$SHORT_SHA
         ports:
         - containerPort: 5000
+        env:
+        - name: GOOGLE_CLOUD_BUCKET_NAME
+          value: hackathon-082024
+
 
 ---
 
