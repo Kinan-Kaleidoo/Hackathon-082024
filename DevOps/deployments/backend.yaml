@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-backend
+  template:
+    metadata:
+      labels:
+        app: app-backend
+    spec:
+      containers:
+      - name: backend
+        image: me-west1-docker.pkg.dev/hackathon-082024/hackathon-repo/backend:$SHORT_SHA
+        ports:
+        - containerPort: 5000
+        env:
+        - name: GOOGLE_CLOUD_BUCKET_NAME
+          value: hackathon-082024
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: app-backend
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 5000
