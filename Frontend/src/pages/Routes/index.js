@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ChatPage from '../Chat/ChatPage';
 import MediaPage from '../Media/MediaPage';
+import MediaItem from '../Media/MediaItem';
 import DocumentPage from '../Documents/DocPage';
 import Header from '../../components/Common/Header';
 import Footer from '../../components/Common/Footer';
@@ -31,6 +32,7 @@ const HomePage = () => {
               <Route path="/signUp" element={<SignUp/>}/> 
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/media" element={<MediaPage />} />
+              <Route path="/media/:title" element={<MediaItem />} />
               <Route path="/documents" element={<DocumentPage />} />
               <Route path="/audio" element={<AudioPage />} /> {/* Add route here */}
               <Route path="/" element={<ChatPage />} />
