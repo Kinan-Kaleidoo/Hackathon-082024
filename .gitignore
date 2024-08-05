@@ -8,5 +8,6 @@ include DevOps/.gitignore
 include Search/.gitignore
 .venv/
 .DS_Store
+venv/
 myenv/
 .idea/

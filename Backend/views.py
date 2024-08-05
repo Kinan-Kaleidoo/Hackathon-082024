@@ -1,4 +1,18 @@
 import os
+from flask import render_template, request, redirect, session, url_for, jsonify
+import requests
+from db import  find_user_by_email, users_collection
+# import pandas as pd
+# import yfinance as yf
+# import datetime as dt
+# import numpy as np
+# import pandas as pd
+# from matplotlib import style
+# from statsmodels.tsa.seasonal import STL
+# from sklearn.metrics import mean_squared_error, accuracy_score
+# from iexfinance.stocks import Stock
+from flask_login import login_required
+from db import find_user_by_email
 
 from flask import request, jsonify
 import magic
@@ -22,7 +36,6 @@ bucket_name = os.getenv('GOOGLE_CLOUD_BUCKET_NAME')
 if not bucket_name:
     raise ValueError("Environment variable GOOGLE_CLOUD_BUCKET_NAME not set.")
 bucket = storage_client.bucket(bucket_name)
-
 
 def login():
     print()
