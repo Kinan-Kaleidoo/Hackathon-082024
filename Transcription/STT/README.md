@@ -18,8 +18,8 @@ This is a Flask-based service that performs speech-to-text transcription on audi
 1. Clone the repository:
 
     ```bash
-    git clone <repository_url>
-    cd <repository_directory>
+    git clone 'https://github.com/Kinan-Kaleidoo/Hackathon-082024.git'
+    cd 'Hackathon-082024/Transcription/STT'
     ```
 
 2. Install dependencies:
