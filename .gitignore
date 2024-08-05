@@ -1,0 +1,10 @@
+include Frontend/.gitignore
+include Backend/.gitignore
+include NLP/.gitignore
+include Transcription/.gitignore
+include Media/.gitignore
+include Docs/.gitignore
+include DevOps/.gitignore
+include Search/.gitignore
+.venv/
+.DS_Store
