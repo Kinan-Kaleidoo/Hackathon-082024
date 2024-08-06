@@ -1,38 +1,29 @@
 import React, { useState } from 'react';
 import DocumentGallery from './DocGallery';
-import { Container, Typography, Paper, Button, TextField } from '@mui/material';
-import SearchComponent from '../../components/SearchComponent';
-import axios from 'axios';
-
+import { Container, Typography, Paper, Button, Input } from '@mui/material';
 import './DocPage.css';
 
 const DocPage = () => {
-  const [file, setFile] = useState(null);
+  const [documents, setDocuments] = useState([
+    { id: 1, file_name: 'Document 1', content: 'This is the first document' },
+    { id: 2, file_name: 'Document 2', content: 'This is the second document' },
+    // Add more demo documents if needed
+  ]);
+  const [fileName, setFileName] = useState('');
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    setFileName(event.target.files[0]?.name || '');
   };
 
-  const handleUpload = async () => {
-    if (!file) {
-      alert('Please select a file to upload');
-      return;
-    }
-
-    const formData = new FormData();
-    console.log(file)
-    formData.append('file', file);
-
-    try {
-      await axios.post('http://localhost:5000/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      alert('File uploaded successfully');
-      // Optionally, you can refresh or update the DocumentGallery component here
-    } catch (error) {
-      alert('Error uploading file');
+  const handleUpload = () => {
+    if (fileName) {
+      const newDocument = {
+        id: documents.length + 1,
+        file_name: fileName,
+        content: 'This is a newly uploaded document' // Replace with actual content if needed
+      };
+      setDocuments([...documents, newDocument]);
+      setFileName('');
     }
   };
 
@@ -42,27 +33,13 @@ const DocPage = () => {
         <Typography variant="h4" gutterBottom>
           Document Gallery
         </Typography>
-        <DocumentGallery />
-      </Paper>
-      <SearchComponent />
-
-      <Paper className="upload-paper">
-        <Typography variant="h6" gutterBottom>
-          Upload PDF
-        </Typography>
-        <TextField
-          type="file"
-          accept=".pdf"
-          onChange={handleFileChange}
-          variant="outlined"
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleUpload}
-        >
-          Upload
-        </Button>
+        <div className="upload-section">
+          <Input type="file" onChange={handleFileChange} />
+          <Button variant="contained" color="primary" onClick={handleUpload}>
+            Upload Document
+          </Button>
+        </div>
+        <DocumentGallery documents={documents} />
       </Paper>
     </Container>
   );
