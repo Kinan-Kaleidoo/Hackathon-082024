@@ -1,0 +1,35 @@
+/* index.css */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .main-content {
+    flex: 1; /* Allows the content to grow and push the footer to the bottom */
+    margin-left: 0; /* Default margin for when sidebar is closed */
+    transition: margin-left 0.3s ease; /* Smooth transition */
+  }
+  
+  .main-content.shrink {
+    margin-left: 240px; /* Margin for when sidebar is open */
+  }
+  
+  header, footer {
+    width: 100%;
+  }
+  
+  footer {
+    background-color: #f1f1f1; /* Adjust as needed */
+    padding: 16px;
+    display: flex;
+    justify-content: center; /* Center footer content */
+  }
+  

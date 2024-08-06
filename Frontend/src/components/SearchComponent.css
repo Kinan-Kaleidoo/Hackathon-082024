@@ -1,0 +1,12 @@
+/* src/components/SearchComponent.css */
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center search component */
+    gap: 8px;
+  }
+  
+  .search-input {
+    margin-right: 8px;
+  }
+  

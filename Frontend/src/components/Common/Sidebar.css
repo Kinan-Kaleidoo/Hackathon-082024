@@ -1,0 +1,36 @@
+.sidebar {
+  width: 240px;
+  background-color: #f5f5f5; /* Light grey */
+  transition: transform 0.3s ease, width 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: auto;
+  z-index: 1000; /* Ensure the sidebar is on top */
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+.sidebar .list {
+  padding-top: 16px;
+}
+
+.sidebar .list-item {
+  padding: 12px 16px;
+}
+
+.sidebar .list-item:hover {
+  background-color: #e0e0e0; /* Slightly darker grey */
+}
+
+.main-content {
+  transition: margin-left 0.3s ease;
+  margin-left: 240px; /* Width of the sidebar */
+}
+
+.main-content.shrink {
+  margin-left: 0;
+}

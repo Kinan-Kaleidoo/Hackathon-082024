@@ -1,0 +1,22 @@
+.footer {
+  padding: 16px;
+  background-color: #f1f1f1; /* Adjust as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.footer-search {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.footer-search .MuiTextField-root {
+  margin-right: 8px;
+}
+
+
+
