@@ -1,9 +1,11 @@
 import os
 import magic
+import requests
 from google.cloud import storage
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_login import login_required
+from db import get_document_by_url, insert_document, update_document
 from datetime import timedelta
 
 # Initialize Flask app
@@ -139,5 +141,111 @@ def search():
     print()
 
 
+
+def allowed_file_audio(content_type):
+    allowed_mime_types = {'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4'}
+    return content_type in allowed_mime_types
+
+
+def inner_nlp(url):
+    response = requests.post('/ms/nlp', json={"url": url})
+
+
+def nlp_improve():
+    response = requests.post('/ms/nlp/improve')
+
+
+def nlp_subject_extract():
+    response = requests.post('/ms/nlp/subject_extract')
+
+
+def nlp_summary_text():
+    response = requests.post('/ms/nlp/summary_text')
+
+
+def nlp_sentiment_analysis():
+    response = requests.post('/ms/nlp/sentiment_analysis')
+
+@login_required
+
+def nlp():
+    if request.is_json:
+        data = request.get_json()
+        url = data.get('url')
+
+        if url:
+            existing_document = get_document_by_url(url)
+            if existing_document:
+                # Update the existing document with the new data
+                update_document(url, data)
+                return jsonify({"message": "Document updated successfully!"}), 200
+
+        else:
+            return jsonify({"error": "URL is required"}), 400
+
+    else:
+        return jsonify({"error": "Request body must be JSON"}), 400
+
+
+"""
+Bashar:
+
+    app.add_url_rule('/improve', 'improve', improve,methods=["POST", "GET"])
+    app.add_url_rule('/subject_extract', 'subject_extract', subject_extract,methods=["POST", "GET"])
+    app.add_url_rule('/summary_text', 'summary_text', summary_text,methods=["POST", "GET"])
+    app.add_url_rule('/sentiment_analysis', 'sentiment_analysis', sentiment_analysis,methods=["POST", "GET"])
+"""
+
+
+def ms_media():
+    if request.method == "POST":
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+
+        return jsonify({"success": True, "message": "File uploaded successfully", "file": file}), 200
+
+
+def ms_audio():
+    if request.method == "POST":
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+
+        return jsonify({"success": True, "message": "File uploaded successfully", "file": file}), 200
+
+
+def ms_search():
+    if request.method == "POST":
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+
+        return jsonify({"success": True, "message": "File uploaded successfully", "file": file}), 200
+
+
+def ms_doc():
+    if request.method == "POST":
+        if 'file' not in request.files:
+            return jsonify({"error": "No file part"}), 400
+
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({"error": "No selected file"}), 400
+            # TODO URL
+        url = f"gs://{bucket_name}/docs/{file.filename}"
+        return jsonify({"success": True, "message": "File uploaded successfully", "url": url}), 200
+      
 if __name__ == '__main__':
     app.run(debug=True)
