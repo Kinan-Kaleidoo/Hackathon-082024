@@ -120,16 +120,4 @@ def process_url(url):
 def description(url):
     return process_url(url)
 
-# # Example usage
-# urls = [
-#     'https://videos.pexels.com/video-files/2308576/2308576-sd_640_360_30fps.mp4',
-#     'https://h5p.org/sites/default/files/h5p/content/1209180/images/file-6113d5f8845dc.jpeg'
-# ]
 
-# for url in urls:
-#     caption = description(url)
-#     print("--------------------------------")
-#     if caption:
-#         print(f"Caption for {url}: {caption}")
-#     else:
-#         print("No caption!")
