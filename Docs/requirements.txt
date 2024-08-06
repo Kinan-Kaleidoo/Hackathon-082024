@@ -1,0 +1,5 @@
+Flask==2.0.2
+google-cloud-storage==2.4.0
+google-cloud-documentai==2.2.0
+google-auth==2.3.3
+Werkzeug==2.0.2
