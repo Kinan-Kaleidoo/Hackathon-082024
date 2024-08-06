@@ -8,16 +8,9 @@ import Header from '../../components/Common/Header';
 import Footer from '../../components/Common/Footer';
 import HomePage from '../../pages/Home/homePage'
 import Sidebar from '../../components/Common/Sidebar';
-<<<<<<< HEAD
 import AudioPage from '../Audio/AudioPage'; // Import the AudioPage
 import SignIn from '../Auto/signIn';
 import SignUp from '../Auto/signUp';
-=======
-import HomePage from '../Home/homePage'
-import AudioPage from '../Audio/AudioPage'; 
-import SignIn from '../Auto/signIn'
-import SignUp from '../Auto/signUp'
->>>>>>> Frontend-Vered
 
 // Rename this component to avoid conflict
 const AppRoutes = () => {
@@ -34,13 +27,9 @@ const AppRoutes = () => {
         <div className={`main-content ${sidebarOpen ? '' : 'shrink'}`}>
           <Header onMenuClick={toggleSidebar} />
           <main>
-<<<<<<< HEAD
-            <Routes>
-              <Route path="/" element={<HomePage />} /> {/* HomePage route */}
-=======
+
             <RouterRoutes>
               <Route path="/" element={<HomePage />} /> 
->>>>>>> Frontend-Vered
               <Route path="/signIn" element={<SignIn />} />
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/chat" element={<ChatPage />} />
