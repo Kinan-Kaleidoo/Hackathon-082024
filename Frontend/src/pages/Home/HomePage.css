@@ -1,0 +1,13 @@
+.home-page {
+  text-align: center;
+  padding: 20px;
+  flex: 1; /* Ensures the content takes up available space */
+}
+
+.home-page h1 {
+  margin-bottom: 20px;
+}
+
+.home-page .MuiGrid-item {
+  margin-bottom: 20px;
+}

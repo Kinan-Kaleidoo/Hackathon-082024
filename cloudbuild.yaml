@@ -32,7 +32,7 @@ steps:
       - |
         gcloud container clusters get-credentials hackathon-cluster --region=${_REGION} --project=$PROJECT_ID &&
         kubectl apply -f DevOps/deployments/${_IMAGE_NAME}.yaml &&
-        kubectl set image deployment/app-${_IMAGE_NAME} ${_IMAGE_NAME}=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA --namespace=default
+        kubectl set image deployment/app-${_IMAGE_NAME} ${_IMAGE_NAME}=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:latest --namespace=default
 
 images:
-  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:$SHORT_SHA'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE_NAME}:${SHORT_SHA}'
