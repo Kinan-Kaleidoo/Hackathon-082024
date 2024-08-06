@@ -1,2 +1,8 @@
 .env
-
+.venv
+/Media/Description
+hackathon-082024-38c5136c029f.json
+*.png
+*.jpeg
+*.mp4
+*.jpg
