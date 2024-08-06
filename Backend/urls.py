@@ -1,10 +1,10 @@
-from views import  media, doc, search, audio, audio_text, video, nlp, ms_media, ms_audio, ms_search
+from views import  media, doc, search, audio, audio_text, video, nlp, ms_media, ms_audio, ms_search, nlp_improve, nlp_subject_extract, nlp_summary_text, nlp_sentiment_analysis, media_result
 from auth import register, login, logout
 
 
 def configure_routes(app):
     app.add_url_rule('/', 'login', login)
-    app.add_url_rule('/login', 'login', login, methods=["GET", "POST"])
+    app.add_url_rule('/login', 'login', login, methods=["POST"])
     app.add_url_rule('/logout', 'logout', logout, methods=["GET"])
     app.add_url_rule('/register', 'register', register, methods=["POST"])
     app.add_url_rule('/media', 'media', media, methods=["GET", "POST"])
@@ -14,10 +14,14 @@ def configure_routes(app):
     app.add_url_rule('/audio_text', 'audio_text', audio_text, methods=["GET", "POST"])
     app.add_url_rule('/video', 'video', video, methods=["GET", "POST"])
     app.add_url_rule('/nlp', 'nlp', nlp, methods=["POST"])
-    app.add_url_rule('/nlp', 'nlp', nlp, methods=["POST"])
     app.add_url_rule('/ms/media', 'ms/media', ms_media, methods=["POST"])
+    app.add_url_rule('/media_result', '/media_result', media_result, methods=["POST"])
     app.add_url_rule('/ms/audio', 'ms/audio', ms_audio, methods=["POST"])
     app.add_url_rule('/ms/search', 'ms/search', ms_search, methods=["POST"])
+    app.add_url_rule('/nlp_improve', 'nlp_improve', nlp_improve, methods=["POST", "GET"])
+    app.add_url_rule('/nlp_subject_extract', 'nlp_subject_extract', nlp_subject_extract,methods=["POST", "GET"])
+    app.add_url_rule('/nlp_summary_text', 'nlp_summary_text', nlp_summary_text,methods=["POST", "GET"])
+    app.add_url_rule('/nlp_sentiment_analysis', 'nlp_sentiment_analysis', nlp_sentiment_analysis,methods=["POST", "GET"])
 
 
 

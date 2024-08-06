@@ -5,7 +5,7 @@ from google.cloud import storage
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_login import login_required
-from db import get_document_by_url, insert_document, update_document
+from db import get_document_by_url, insert_document, update_document, update_media_document
 from datetime import timedelta
 
 # Initialize Flask app
@@ -54,14 +54,33 @@ def media():
 
     if file_type in ALLOWED_IMAGE_TYPES:
         destination_blob_name = f"media/images/{file.filename}"
+        public_url = upload_file_to_gcs(file, destination_blob_name)
+        external_api_base_url = 'http://media-service:8086/ms/media'
+        external_api_url = f"{external_api_base_url}?url={public_url}"
+        requests.post(external_api_url)
+        return jsonify(
+            {"message": "File uploaded successfully", "path": destination_blob_name, "file_url": public_url}), 200
     elif file_type in ALLOWED_VIDEO_TYPES:
         destination_blob_name = f"media/videos/{file.filename}"
+        public_url = upload_file_to_gcs(file, destination_blob_name)
+        external_api_base_url = 'http://media-service:8086/ms/media'
+        external_api_url = f"{external_api_base_url}?url={public_url}"
+        requests.post(external_api_url)
+        return jsonify(
+            {"message": "File uploaded successfully", "path": destination_blob_name, "file_url": public_url}), 200
     else:
         return jsonify({"error": "File is not an image or video", "file_type": file_type}), 400
 
-    public_url = upload_file_to_gcs(file, destination_blob_name)
-    return jsonify(
-        {"message": "File uploaded successfully", "path": destination_blob_name, "file_url": public_url}), 200
+
+def media_result():
+    data = request.get_json()
+    result = data.get('result')
+    url = data.get('url')
+    if not result:
+        return jsonify({'error': 'Text is required'}), 400
+    update_media_document(url, result)
+    external_api_url = 'frontend-service:8081/media_result'
+    requests.post(external_api_url, json={'result': result})
 
 
 @login_required
@@ -246,6 +265,51 @@ def ms_doc():
             # TODO URL
         url = f"gs://{bucket_name}/docs/{file.filename}"
         return jsonify({"success": True, "message": "File uploaded successfully", "url": url}), 200
-      
+
+
+def nlp_improve():
+    data = request.get_json()
+    text = data.get('text')
+    url = data.get('url')
+    if not text:
+        return jsonify({'error': 'Text is required'}), 400
+    update_document(url, text)
+    external_api_url = 'frontend-service:8081/nlp_improve'
+    requests.post(external_api_url, json={'text': text})
+
+
+def nlp_subject_extract():
+    data = request.get_json()
+    subject = data.get('subject')
+    url = data.get('url')
+    if not subject:
+        return jsonify({'error': 'Text is required'}), 400
+    update_document(url, subject)
+    external_api_url = 'frontend-service:8081/nlp_subject_extract'
+    requests.post(external_api_url, json={'subject': subject})
+
+
+def nlp_summary_text():
+    data = request.get_json()
+    summary = data.get('summary')
+    url = data.get('url')
+    if not summary:
+        return jsonify({'error': 'Text is required'}), 400
+    update_document(url, summary)
+    external_api_url = 'frontend-service:8081/nlp_summary_text'
+    requests.post(external_api_url, json={'summary': summary})
+
+
+def nlp_sentiment_analysis():
+    data = request.get_json()
+    sentiment = data.get('sentiment')
+    url = data.get('url')
+    if not sentiment:
+        return jsonify({'error': 'Text is required'}), 400
+    update_document(url, sentiment)
+    external_api_url = 'frontend-service:8081/nlp_sentiment_analysis'
+    requests.post(external_api_url, json={'sentiment': sentiment})
+
+
 if __name__ == '__main__':
     app.run(debug=True)

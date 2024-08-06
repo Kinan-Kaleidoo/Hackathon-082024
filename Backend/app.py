@@ -13,7 +13,6 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 app.secret_key = 'dodo'
 
 configure_routes(app)
@@ -21,7 +20,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'  # Redirect to the login view if not authenticated
 login_manager.login_message = "צריכים להיות מחוברים כדי לגשת לדף זה"
-# mongo_username = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
 
 
 @login_manager.user_loader

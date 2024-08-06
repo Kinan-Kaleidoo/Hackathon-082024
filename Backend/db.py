@@ -32,6 +32,10 @@ def insert_document(document):
 def update_document(url, new_data):
     nlp_collection.update_one({'url': url}, {'$set': new_data})
 
+
+def update_media_document(url, new_data):
+    nlp_collection.update_one({'url': url}, {'$set': new_data})
+
 def add_nlp_url(url):
     result = nlp_collection.insert_one({'url':url})
 
