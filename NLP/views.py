@@ -59,7 +59,7 @@ def improve():
         return jsonify({'error': 'No text field provided in JSON'}), 400
     
     text = data['text']
-    prompt = "זה התמלול הראשוני בבקשה תשפר את זה, תשמור על סדר?"
+    prompt = " בבקשה תתקן שגיאות כתיב, התייחס להקשר המשפט בתיקון, תשמור על סדר ואל תשנה ניסוח"
     response1, status1 = call_geminie(prompt, text)
     if status1 != 200:
         return jsonify({'error': 'Error processing first request'}), status1
@@ -139,5 +139,8 @@ def sentiment_analysis():
     
     results = [{'sentence': sentence, 'analysis': sentiment_analysis_pipeline(sentence)} for sentence in sentences]
     return jsonify(results)
+        
+        
+        
         
         
